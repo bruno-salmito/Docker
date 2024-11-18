@@ -37,13 +37,99 @@ curl -fsSl https://get.docker.com | bash
 ```
 O comando acima instala o Docker em um sistema Linux de forma automatizada, utilizando um script oficial do Docker
 
-**Imagem Docker**
 **O que é o UFS (Union File System) ?**
+O Union File System (UFS) é o sistema de arquivos em camadas usado pelo Docker para gerenciar imagens e containeres. Ele permite combinar várias camadas de arquivos em um único sistema de arquivos.
+
+* Imagens: São compostas por camadas de leitura
+* Containeres: Adicionam uma camada de escrita no topo das camadas de imagem.
+
+Exemplo: Visualizando as camadas de uma imagem.
+```bash
+docker image history nginx
+```
+
 **Volumes**
+Os volumes no Docker são usados para armazenar dados persistentes fora do container. Isso é bastante útil porquê, por padrão, os dados dentro de um container são descartados quando ele é destruído.
+
+Exemplo: Listando volumes:
+```bash
+docker volume ls
+```
+Exemplo: Criando um volume
+```bash
+docker volume create meu-volume
+```
+Exemplo: Usando um volume
+```bash
+docker run -d -v meu-volume:/dados --name meu-container nginx
+```
+* -v meu-volume:/dados: Monta o volume ***meu-volume*** no diretório /dados dentro do container.
+
 **Network**
+O Docker permite a criação e gerenciamento de redes para que os containeres se comuniquem entre si e com o mundo exterior.
+* Tipos de redes:
+    * Bridge: Rede padrão para containeres em um host.
+    * host: Compartilha a interface de rede com o host.
+    * none: Containeres completamente isolados da rede.
+
+Exemplo: Listando as redes disponíveis.
+```bash
+docker network ls
+```
+Exemplo: Criando uma rede personalizada.
+```bash
+docker network create minha-rede
+```
+Exemplo: Conectando um container a uma rede
+```bash
+docker container run -d --network minha-rede --name app nginx
+```
+Exemplo: Conectando dois containeres.
+```bash
+docker run -d --network minha-rede --name app-backend redis
+docker run -d --network minha-rede --name app-frontend nginx
+```
+Agora, os contêineres podem se comunicar usando seus nomes de host: app-backend e app-frontend.
+
 **Dockerfile**
-Usar o giropops senhas no diretório /app
+O Dockerfile é um arquivo de texto contendo instruções para construir uma imagem Docker personalizada. Ele permite definir o ambiente necessário para nossa aplicação.
+
+Para exemplicar nosso Dockerfile vamos utilizar a aplicação Giropops-Senhas presente no diretório /app deste repositório, essa aplicação foi desenvolvida em python e utiliza o Redis.
+
+Antes de criarmos o nosso Dockerfile, vamos subir nosso container Redis.
+
+Exemplo: Criando um container com o Redis.
+```bash
+docker container run -d --name redis_server -p 6379:6379 redis
+```
+
+Exemplo: Criando o Dockerfile para rodar a aplicação Giropops-Senhas
+```bash
+FROM python
+WORKDIR /app
+COPY ./app .
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 5000
+ENV REDIS_HOST=IP_DO_HOST
+ENTRYPOINT [ "flask", "run", "--host=0.0.0.0" ]
+```
+Salve o arquivo.
+
+Exemplo: Construindo a imagem com o Dockerfile
+```bash
+docker image build -t giropops-senhas:1.0 .
+```
+Exemplo: Executando a imagem criada
+```bash
+docker container run -d --name giropops-senhas -p 5000:5000 giropops-senhas:1.0
+```
+
+Acesse em: http://localhost:5000
+
 **Docker Compose**
+O Docker compose é uma ferramenta para gerenciar múltiplos containeres em um aplicativo usando um arquivo YAMl para definir serviços, volumes e redes, podemos dizer então que ele é um orquestador de containeres.
+
+
 **Perguntas e respostas**
 <hr>
 
