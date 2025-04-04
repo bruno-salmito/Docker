@@ -2,7 +2,7 @@
 Este repositório contém informações, resumos e exemplos para ajudar a entender conceitos fundamentais do Docker, incluindo contêineres, o que é o Docker, UFS (Union File System), volumes, networks, Dockerfile e Docker Compose.
 <hr>
 
-#### Principais conceitos
+### Principais conceitos
 **Container:** É uma instância em execução de uma imagem, ele fornece um ambiente isolado para a aplicação, garantindo que ela rode da mesma forma em qualquer lugar, ou seja, container é uma tecnologia de virtualização leve usada principalmente para empacotar e isolar aplicativos e suas dependências em um ambiente separado.
 Diferentemente de uma máquina virtual, os contêineres compartilham o mesmo kernel do sistema operacional do host, tornando-se mais leves e rápidos.
 
@@ -38,7 +38,7 @@ Diferentemente de uma máquina virtual, os contêineres compartilham o mesmo ker
 </p>
 <hr>
 
-#### Docker
+### Docker
 O Docker é uma plataforma de virtualização de código aberto que permite a criação, o empacotamento e a distribuição de aplicações em contêineres, proporcionando um ambiente isolado e consistente para executar aplicações independentemente da infraestrutura subjacente.
 
 Com Docker, os desenvolvedores podem criar imagens de contêineres que incluem o código da aplicação, suas dependências e as configurações necessárias para execução. Essas imagens podem ser distribuídas e executadas em qualquer sistema que tenha o Docker instalado, garantindo que a aplicação funcione da mesma maneira em diferentes ambientes.
@@ -84,14 +84,102 @@ Verificando a instalação do docker
 docker --version
 ```
 
+**Exemplo:** Criando o nosso primeiro contêiner.
+```bash
+docker container run -d -p 8080:80 --name meu-nginx nginx
+```
+Um contêiner chamado meu-nginx foi criado contendo a imagem oficial do servidor web Nginx.
+📌**Explicando o comando:**
+* -d: Executa o container em segundo plano, como um daemon.
+* -p 8080:80: Mapeia a porta 80 do container para a porta 8080 do host.
+* --name: Nomeia o container como meu-nginx.
+
+Para acessar o container abra o seu navegador e entre no endereço http://localhost:8080
+
+Para listar os contêineres criados e seu status.
+```bash
+docker container ls
+```
+<p>
+    <img src="images/primeiro_conteiner.png">
+</p>
+
+📌A saída do comando é uma tabela com as seguintes colunas:
+
+* **CONTAINER ID:** Um identificador único para o contêiner.
+* **IMAGE:** A imagem Docker usada para criar o contêiner (neste caso, nginx).
+* **COMMAND:** O comando que está sendo executado dentro do contêiner ("/docker-entrypoint...").
+* **CREATED:** Há quanto tempo o contêiner foi criado (12 seconds ago).
+* **STATUS:** O status atual do contêiner (Up 12 seconds).
+* **PORTS:** As portas que estão sendo mapeadas do contêiner para o host.
+0.0.0.0:8080->80/tcp significa que a porta 80 do contêiner está mapeada para a porta 8080 do host.
+[::]:8088->80/tcp é semelhante, mas para conexões IPv6.
+* **NAMES:** O nome atribuído ao contêiner (meu-nginx).
 
 
-Criando um contêiner simples rodando o nginx.
+**Exemplo:** Suponhamos que temos um contêiner rodando a imagem do ubuntu e que queremos acessar o terminal desse contêiner.
+```bash
+docker container attach ubuntu
+```
+<p>
+    <img src="images/docker-attach.png">
+</p>
+
+
+**Exemplo:** Podemos parar a execução de um container
+```bash
+docker container stop container_name
+```
+<p>
+    <img src="images/docker-list.png">
+</p>
+
+E**Exemplo:** Exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução.
+```bash
+docker container stats
+```
+
+<p>
+    <img src="images/docker-stats.png">
+</p>
+
+📌Obs: saída do comando docker stats exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução. Vamos analisar cada coluna:
+
+Coluna	                        Descrição
+CONTAINER ID	                ID único do contêiner em execução.
+NAME	                        Nome atribuído ao contêiner.
+CPU %	                        Uso da CPU pelo contêiner em relação ao total disponível no host.
+MEM USAGE / LIMIT	            Memória usada pelo contêiner e o limite configurado.
+MEM %	                        Percentual de memória usada em relação ao limite.
+NET I/O	                        Quantidade de dados enviados e recebidos pelo contêiner na rede.
+BLOCK I/O	                    Quantidade de dados lidos e escritos em disco pelo contêiner.
+PIDS	                        Número de processos ativos dentro do contêiner.
+
+**Exemplo:** Exibe a lista de processos em execução dentro do contêiner chamado meu-nginx.
+```bash
+docker container top meu-nginx
+```
+
+<p>
+    <img src="images/docker-top.png">
+</p>
+
+<hr>
+
+**Falta adicionar**
+
+DockerFile
+DockerCompose
+Distroless
+Análise de vulnerabilidades
+Assinando uma imagem.
+
 
 
 
 <hr>
-#### Conclusão
+
+### Conclusão
 
 Docker revolucionou o mundo da tecnologia ao tornar a implantação de aplicações mais eficiente e previsível. Com o conhecimento abordado neste guia, você pode começar a trabalhar com Docker e explorar mais recursos avançados, como orquestração com Kubernetes e CI/CD.
 
