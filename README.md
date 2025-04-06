@@ -89,7 +89,8 @@ docker --version
 docker container run -d -p 8080:80 --name meu-nginx nginx
 ```
 Um contêiner chamado meu-nginx foi criado contendo a imagem oficial do servidor web Nginx.
-📌**Explicando o comando:**
+
+📌 **Explicando o comando:**
 * -d: Executa o container em segundo plano, como um daemon.
 * -p 8080:80: Mapeia a porta 80 do container para a porta 8080 do host.
 * --name: Nomeia o container como meu-nginx.
@@ -104,7 +105,7 @@ docker container ls
     <img src="images/primeiro_conteiner.png">
 </p>
 
-📌A saída do comando é uma tabela com as seguintes colunas:
+📌 A saída do comando é uma tabela com as seguintes colunas:
 
 * **CONTAINER ID:** Um identificador único para o contêiner.
 * **IMAGE:** A imagem Docker usada para criar o contêiner (neste caso, nginx).
@@ -134,7 +135,7 @@ docker container stop container_name
     <img src="images/docker-list.png">
 </p>
 
-E**Exemplo:** Exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução.
+**Exemplo:** Exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução.
 ```bash
 docker container stats
 ```
@@ -143,7 +144,7 @@ docker container stats
     <img src="images/docker-stats.png">
 </p>
 
-📌Obs: saída do comando docker stats exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução. Vamos analisar cada coluna:
+📌 Obs: saída do comando docker stats exibe estatísticas em tempo real sobre o uso de recursos dos contêineres em execução. Vamos analisar cada coluna:
 
 Coluna	                        Descrição
 CONTAINER ID	                ID único do contêiner em execução.
@@ -164,15 +165,47 @@ docker container top meu-nginx
     <img src="images/docker-top.png">
 </p>
 
+**Exemplo:** Listando as redes disponíveis.
+```bash
+docker network ls
+```
+**Exemplo:** Criando uma rede personalizada.
+```bash
+docker network create minha-rede
+```
+**Exemplo:** Conectando um container a uma rede
+```bash
+docker container run -d --network minha-rede --name app nginx
+```
+**Exemplo:** Conectando dois containeres.
+```bash
+docker run -d --network minha-rede --name app-backend redis
+docker run -d --network minha-rede --name app-frontend nginx
+```
+Agora, os contêineres podem se comunicar usando seus nomes de host: app-backend e app-frontend.
+
+**Exemplo:** Listando volumes:
+```bash
+docker volume ls
+```
+**Exemplo:** Criando um volume
+```bash
+docker volume create meu-volume
+```
+**Exemplo:** Usando um volume
+```bash
+docker run -d -v meu-volume:/dados --name meu-container nginx
+```
+* -v meu-volume:/dados: Monta o volume ***meu-volume*** no diretório /dados dentro do container.
+
 <hr>
+Para continuar o nosso estudo, dividi os temas abaixo em tópicos.
 
-**Falta adicionar**
-
-DockerFile
-DockerCompose
-Distroless
-Análise de vulnerabilidades
-Assinando uma imagem.
+* [DockerFile](DockerFile/README.md)
+* [DockerCompose](DockerCompose/README.md)
+* [Distroless](DistroLess/README.md)
+* [Análise de vulnerabilidades]
+* [Assinando uma imagem]
 
 
 
